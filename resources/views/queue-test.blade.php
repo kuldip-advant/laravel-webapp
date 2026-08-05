@@ -1,125 +1,153 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Queue Test</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Queue Test — {{ config('app.name', 'Laravel') }}</title>
 
-        body {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1.5rem;
-            font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
-            background-color: #0f1419;
-            background-image:
-                radial-gradient(ellipse at 20% 10%, #1a2f45 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 90%, #1e2a24 0%, transparent 45%);
-            color: #e7ecf1;
-        }
+        @fonts
 
-        .card {
-            width: 100%;
-            max-width: 420px;
-            padding: 2rem;
-            background-color: #1a222c;
-            border: 1px solid #2a3542;
-            border-radius: 12px;
-        }
-
-        h1 {
-            margin-bottom: 0.35rem;
-            font-size: 1.5rem;
-            font-weight: 600;
-            letter-spacing: -0.02em;
-            color: #e7ecf1;
-        }
-
-        .lead {
-            margin-bottom: 1.5rem;
-            color: #8b9aab;
-            line-height: 1.5;
-            font-size: 0.95rem;
-        }
-
-        .flash {
-            margin-bottom: 1.25rem;
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
-            background-color: #163528;
-            border: 1px solid #2f6b4f;
-            color: #3ecf8e;
-            font-size: 0.9rem;
-            line-height: 1.4;
-        }
-
-        button {
-            display: block;
-            width: 100%;
-            border: 0;
-            border-radius: 8px;
-            padding: 0.85rem 1rem;
-            font-family: inherit;
-            font-size: 1rem;
-            font-weight: 600;
-            color: #061018;
-            background-color: #3d9cfd;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #5aadff;
-        }
-
-        button:active {
-            background-color: #2f86e0;
-        }
-
-        .hint {
-            margin-top: 1.25rem;
-            font-size: 0.8rem;
-            color: #8b9aab;
-            line-height: 1.55;
-        }
-
-        code {
-            font-family: "IBM Plex Mono", ui-monospace, monospace;
-            font-size: 0.78rem;
-            color: #c5d4e3;
-            word-break: break-word;
-        }
-    </style>
-</head>
-<body>
-    <main class="card">
-        <h1>Queue test</h1>
-        <p class="lead">Dispatch the <code>SayHello</code> job to verify your queue worker.</p>
-
-        @if (session('status'))
-            <div class="flash">{{ session('status') }}</div>
+        @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
+            @vite(['resources/css/app.css', 'resources/js/app.js'])
         @endif
 
-        <form method="POST" action="{{ route('queue-test.dispatch') }}">
-            @csrf
-            <button type="submit">Dispatch SayHello job</button>
-        </form>
+        <style>
+            body {
+                margin: 0;
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 1.5rem;
+                font-family: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+                background: #FDFDFC;
+                color: #1b1b18;
+            }
 
-        <p class="hint">
-            Run a worker with:<br>
-            <code>php artisan queue:work</code><br><br>
-            Then check <code>storage/logs/laravel.log</code> for:<br>
-            <code>SayHello job processed</code>
-        </p>
-    </main>
-</body>
+            .card {
+                width: 100%;
+                max-width: 28rem;
+                padding: 2rem;
+                background: #ffffff;
+                border-radius: 0.5rem;
+                box-shadow: inset 0 0 0 1px rgba(26, 26, 0, 0.16);
+            }
+
+            h1 {
+                margin: 0 0 0.35rem;
+                font-size: 1.25rem;
+                font-weight: 500;
+            }
+
+            .lead {
+                margin: 0 0 1.5rem;
+                color: #706f6c;
+                line-height: 1.5;
+                font-size: 0.95rem;
+            }
+
+            .flash {
+                margin: 0 0 1.25rem;
+                padding: 0.75rem 1rem;
+                border-radius: 0.375rem;
+                background: #ecfdf5;
+                border: 1px solid #a7f3d0;
+                color: #047857;
+                font-size: 0.9rem;
+                line-height: 1.4;
+            }
+
+            button {
+                display: block;
+                width: 100%;
+                border: 1px solid #19140035;
+                border-radius: 0.25rem;
+                padding: 0.7rem 1rem;
+                font: inherit;
+                font-weight: 500;
+                color: #1b1b18;
+                background: #FDFDFC;
+                cursor: pointer;
+            }
+
+            button:hover {
+                border-color: #1915014a;
+                background: #f7f7f5;
+            }
+
+            .hint {
+                margin: 1.25rem 0 0;
+                font-size: 0.8rem;
+                color: #706f6c;
+                line-height: 1.55;
+            }
+
+            code {
+                font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+                font-size: 0.78rem;
+                color: #1b1b18;
+                word-break: break-word;
+            }
+
+            @media (prefers-color-scheme: dark) {
+                body {
+                    background: #0a0a0a;
+                    color: #EDEDEC;
+                }
+
+                .card {
+                    background: #161615;
+                    box-shadow: inset 0 0 0 1px #fffaed2d;
+                }
+
+                .lead,
+                .hint {
+                    color: #A1A09A;
+                }
+
+                .flash {
+                    background: #052e1c;
+                    border-color: #065f46;
+                    color: #6ee7b7;
+                }
+
+                button {
+                    color: #EDEDEC;
+                    background: #161615;
+                    border-color: #3E3E3A;
+                }
+
+                button:hover {
+                    border-color: #62605b;
+                    background: #1c1c1a;
+                }
+
+                code {
+                    color: #EDEDEC;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <main class="card">
+            <h1>Queue test</h1>
+            <p class="lead">Dispatch the <code>SayHello</code> job to verify your queue worker.</p>
+
+            @if (session('status'))
+                <div class="flash">{{ session('status') }}</div>
+            @endif
+
+            <form method="POST" action="{{ route('queue-test.dispatch') }}">
+                @csrf
+                <button type="submit">Dispatch SayHello job</button>
+            </form>
+
+            <p class="hint">
+                Run a worker with:<br>
+                <code>php artisan queue:work</code><br><br>
+                Then check <code>storage/logs/laravel.log</code> for:<br>
+                <code>SayHello job processed</code>
+            </p>
+        </main>
+    </body>
 </html>
